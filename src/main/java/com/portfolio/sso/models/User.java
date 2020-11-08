@@ -27,6 +27,17 @@ public class User {
 
     @NotBlank
     @Size(max = 50)
+    private String firstName;
+
+    @NotBlank
+    @Size(max = 50)
+    private String lastName;
+
+    @Size(max = 255)
+    private String objective;
+
+    @NotBlank
+    @Size(max = 50)
     @Email
     private String email;
 
@@ -52,6 +63,18 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
+
+    public User(String username, String email, String password,Integer phoneNumber,String firstName, String lastName, String objective) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.firstName =  firstName;
+        this.lastName =  lastName;
+        this.objective =  objective;
+    }
+
+
 
     public Long getId() {
         return id;
@@ -99,5 +122,29 @@ public class User {
 
     public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getObjective() {
+        return objective;
+    }
+
+    public void setObjective(String objective) {
+        this.objective = objective;
     }
 }
