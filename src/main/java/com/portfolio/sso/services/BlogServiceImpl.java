@@ -6,7 +6,10 @@ import com.portfolio.sso.payload.request.CreateBlogRequest;
 import com.portfolio.sso.payload.response.CreateBlogResponse;
 import com.portfolio.sso.repository.BlogRepository;
 import com.portfolio.sso.repository.UserRepository;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -29,12 +32,12 @@ public class BlogServiceImpl implements BlogService {
         return res.toResponse();
     }
 
-    public List<CreateBlogResponse> getAllBlog() {
-        List<Blog> listBlog = blogRepository.findAll();
-        List<CreateBlogResponse> res = new ArrayList<>();
-        for (int i = 0; i < listBlog.size(); i++) {
-            res.add(listBlog.get(i).toResponse());
-        }
-        return res;
+    public Page<Blog> getAllBlog(Pageable pageable) {
+        Page<Blog> listBlog = blogRepository.findAll(pageable);
+//        List<CreateBlogResponse> list = new ArrayList<>();
+//        for (int i = 0; i < listBlog.getContent().size(); i++) {
+//            list.add(listBlog.getContent().get(i).toResponse());
+//        }
+        return listBlog;
     }
 }
