@@ -27,7 +27,7 @@ public class BlogController {
     }
 
     @GetMapping("")
-    public Page<Blog> getAllBlog(
+    public Page<CreateBlogResponse> getAllBlog(
                 @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
             @RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort

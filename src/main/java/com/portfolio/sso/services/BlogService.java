@@ -11,5 +11,5 @@ import java.util.List;
 public interface BlogService {
     public CreateBlogResponse createBlog(CreateBlogRequest blog);
 
-    public Page<Blog> getAllBlog(Pageable pageable);
+    public Page<CreateBlogResponse> getAllBlog(Pageable pageable);
 }

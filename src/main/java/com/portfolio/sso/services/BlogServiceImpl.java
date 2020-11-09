@@ -32,8 +32,8 @@ public class BlogServiceImpl implements BlogService {
         return res.toResponse();
     }
 
-    public Page<Blog> getAllBlog(Pageable pageable) {
-        Page<Blog> listBlog = blogRepository.findAll(pageable);
+    public Page<CreateBlogResponse> getAllBlog(Pageable pageable) {
+        Page<CreateBlogResponse> listBlog = blogRepository.getAllBlog(pageable);
 //        List<CreateBlogResponse> list = new ArrayList<>();
 //        for (int i = 0; i < listBlog.getContent().size(); i++) {
 //            list.add(listBlog.getContent().get(i).toResponse());
