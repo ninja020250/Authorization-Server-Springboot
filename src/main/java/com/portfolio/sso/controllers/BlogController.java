@@ -1,18 +1,18 @@
 package com.portfolio.sso.controllers;
 
-import com.portfolio.sso.models.Blog;
-import com.portfolio.sso.payload.request.CreateBlogRequest;
-import com.portfolio.sso.payload.response.CreateBlogResponse;
+import com.portfolio.sso.payload.request.BlogRequest;
+import com.portfolio.sso.payload.request.PageableRequest;
+import com.portfolio.sso.payload.response.BlogResponse;
 import com.portfolio.sso.services.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -22,24 +22,20 @@ public class BlogController {
     private BlogService blogService;
 
     @PostMapping("")
-    public CreateBlogResponse createBlog(@Valid @RequestBody CreateBlogRequest req){
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public BlogResponse createBlog(@Valid @RequestBody BlogRequest req) {
         return blogService.createBlog(req);
     }
 
     @GetMapping("")
-    public Page<CreateBlogResponse> getAllBlog(
-                @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
-            @RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort
-    ){
-        Sort sortable = Sort.by("title").ascending();
-        if (sort.equals("ASC")) {
-            sortable = Sort.by("title").ascending();
+    public Page<BlogResponse> getAllBlog(
+            PageableRequest params
+    ) {
+        Sort sortable = Sort.by(params.getSortField()).ascending();
+        if (params.getSort().equals("DESC")) {
+            sortable = Sort.by(params.getSortField()).descending();
         }
-        if (sort.equals("DESC")) {
-            sortable = Sort.by("title").descending();
-        }
-        Pageable pageable = PageRequest.of(page, size, sortable);
-        return blogService.getAllBlog(pageable);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sortable);
+        return blogService.getAllBlog(pageable, params.getSearch());
     }
 }

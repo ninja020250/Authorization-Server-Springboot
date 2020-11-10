@@ -1,7 +1,7 @@
 package com.portfolio.sso.models;
 
-import com.portfolio.sso.payload.request.CreateBlogRequest;
-import com.portfolio.sso.payload.response.CreateBlogResponse;
+import com.portfolio.sso.payload.request.BlogRequest;
+import com.portfolio.sso.payload.response.BlogResponse;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -63,7 +63,7 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(CreateBlogRequest req, User user) {
+    public Blog(BlogRequest req, User user) {
         if (req.getBanner() == null || req.getBanner().isEmpty()) {
             this.banner = req.getThumbnail();
         } else {
@@ -157,8 +157,8 @@ public class Blog {
         this.updatedAt = updatedAt;
     }
 
-    public CreateBlogResponse toResponse() {
-        CreateBlogResponse res =  new CreateBlogResponse();
+    public BlogResponse toResponse() {
+        BlogResponse res =  new BlogResponse();
         res.setId(this.id);
         res.setTitle(this.title);
         res.setTemplate(this.template);
