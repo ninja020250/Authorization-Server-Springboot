@@ -1,9 +1,19 @@
-package com.portfolio.sso.payload.response;
+package com.portfolio.sso.payload.request;
 
+import com.portfolio.sso.models.User;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-public class CreateBlogResponse {
+@Data
+public class BlogRequest {
     private Long id;
+
+    private Long userId;
 
     private String title;
 
@@ -21,27 +31,20 @@ public class CreateBlogResponse {
 
     private LocalDateTime updatedAt;
 
-    public CreateBlogResponse() {
-    }
-
-    public CreateBlogResponse(Long id, String title, String template, String thumbnail, String body, String banner, Boolean published, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.template = template;
-        this.thumbnail = thumbnail;
-        this.body = body;
-        this.banner = banner;
-        this.published = published;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {

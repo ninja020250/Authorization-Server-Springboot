@@ -1,6 +1,8 @@
 package com.portfolio.sso.models;
 
 
+import org.springframework.lang.Nullable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,6 +49,9 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+
+    @Column(nullable = true, length = 64)
+    private String photos;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
@@ -147,5 +152,19 @@ public class User {
 
     public void setObjective(String objective) {
         this.objective = objective;
+    }
+
+    public String getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String photos) {
+        this.photos = photos;
+    }
+
+    @Transient
+    public String getPhotosImagePath(){
+        if (photos == null || id == null) return null;
+        return "/user-photos/" + id + "/" + photos;
     }
 }
