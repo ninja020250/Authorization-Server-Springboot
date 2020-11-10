@@ -153,4 +153,18 @@ public class User {
     public void setObjective(String objective) {
         this.objective = objective;
     }
+
+    public String getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String photos) {
+        this.photos = photos;
+    }
+
+    @Transient
+    public String getPhotosImagePath(){
+        if (photos == null || id == null) return null;
+        return "/user-photos/" + id + "/" + photos;
+    }
 }
