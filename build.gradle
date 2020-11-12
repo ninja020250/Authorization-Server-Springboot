@@ -26,7 +26,12 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'javax.validation:validation-api'
 	compileOnly "org.projectlombok:lombok:1.18.16"
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	compile 'com.google.api-client:google-api-client:1.30.10'
+
 }
 
 test {

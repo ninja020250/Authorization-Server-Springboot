@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.portfolio.sso.payload.request.SocialLoginRequest;
+import com.portfolio.sso.security.services.GoogleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +41,9 @@ import com.portfolio.sso.security.services.UserDetailsImpl;
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Autowired
+    GoogleService googleService;
 
     @Autowired
     UserRepository userRepository;
@@ -72,6 +78,26 @@ public class AuthController {
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @PostMapping("/social-signin")
+    public ResponseEntity<?> socialAuthenticateUser(@Valid @RequestBody SocialLoginRequest socialLoginRequest) {
+        try {
+            UserDetailsImpl userDetails = googleService.verify(socialLoginRequest.getAccessToken());
+            String jwt = jwtUtils.generateJwtTokenSocial(userDetails);
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    roles));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .notFound().build();
+        }
     }
 
     @PostMapping("/signup")

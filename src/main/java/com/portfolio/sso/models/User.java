@@ -163,7 +163,7 @@ public class User {
     }
 
     @Transient
-    public String getPhotosImagePath(){
+        public String getPhotosImagePath(){
         if (photos == null || id == null) return null;
         return "/user-photos/" + id + "/" + photos;
     }
