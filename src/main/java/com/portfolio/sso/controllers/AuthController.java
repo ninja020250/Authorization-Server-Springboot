@@ -7,8 +7,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.portfolio.sso.models.Profile;
 import com.portfolio.sso.payload.request.SocialLoginRequest;
+import com.portfolio.sso.repository.ProfileRepository;
 import com.portfolio.sso.security.services.GoogleService;
+import com.portfolio.sso.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,6 +50,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     RoleRepository roleRepository;
@@ -91,8 +97,8 @@ public class AuthController {
 
             return ResponseEntity.ok(new JwtResponse(jwt,
                     userDetails.getId(),
-                    userDetails.getUsername(),
                     userDetails.getEmail(),
+                    userDetails.getUsername(),
                     roles));
         } catch (Exception e) {
             return ResponseEntity
@@ -116,9 +122,8 @@ public class AuthController {
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getPhoneNumber());
+                signUpRequest.getEmail());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -130,13 +135,13 @@ public class AuthController {
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "admin":
+                    case "ROLE_ADMIN":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
-                    case "mod":
+                    case "ROLE_MODERATOR":
                         Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
@@ -151,8 +156,10 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
-
+        Profile defaultProfile = new Profile();
+        defaultProfile.setFirstName("Nhat Cuong");
+        defaultProfile.setLastName("Huynh");
+        userService.createAccount(user, defaultProfile);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }

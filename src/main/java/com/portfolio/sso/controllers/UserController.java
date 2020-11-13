@@ -1,12 +1,17 @@
 package com.portfolio.sso.controllers;
 
+import com.portfolio.sso.models.Profile;
 import com.portfolio.sso.models.User;
+import com.portfolio.sso.payload.response.MessageResponse;
+import com.portfolio.sso.repository.ProfileRepository;
 import com.portfolio.sso.repository.UserRepository;
 import com.portfolio.sso.security.services.CityService;
 import com.portfolio.sso.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -44,6 +52,18 @@ public class UserController {
         } catch (Exception e) {
             System.out.println(e);
             return null;
+        }
+    }
+
+    @GetMapping("/profile/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> getUserProfileById(@PathVariable Long id) {
+        try {
+            Profile user = profileRepository.findProfileById(id).orElseThrow(NullPointerException::new);
+            return ResponseEntity.ok(user);
+        } catch (NullPointerException e) {
+            return ResponseEntity
+                    .notFound().build();
         }
     }
 

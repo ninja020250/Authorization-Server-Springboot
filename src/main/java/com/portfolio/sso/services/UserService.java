@@ -1,6 +1,8 @@
 package com.portfolio.sso.services;
 
+import com.portfolio.sso.models.Profile;
 import com.portfolio.sso.models.User;
+import com.portfolio.sso.repository.ProfileRepository;
 import com.portfolio.sso.repository.UserRepository;
 import com.portfolio.sso.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +17,25 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository repo;
+    private ProfileRepository profileRepository;
 
-    public String updateUserAvatar(Long id, MultipartFile multipartFile)  throws IOException  {
+    @Autowired
+    UserRepository userRepository;
+
+    public String updateUserAvatar(Long id, MultipartFile multipartFile) throws IOException {
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        User user = repo.findById(id).orElseThrow(() -> new UsernameNotFoundException("User Not Found with id:"));
-        user.setPhotos(fileName);
-        User savedUser = repo.save(user);
+        Profile profile = profileRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User Not Found with id:"));
+        profile.setPhotos(fileName);
+        Profile savedUser = profileRepository.save(profile);
         String uploadDir = "user-photos/" + savedUser.getId();
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         return "/user-photos/" + id + "/" + fileName;
+    }
+
+    public boolean createAccount(User user, Profile profile) {
+        User u = userRepository.save(user);
+        profile.setId(u.getId());
+        Profile p = profileRepository.save(profile);
+        return true;
     }
 }
