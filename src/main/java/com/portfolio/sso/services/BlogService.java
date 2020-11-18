@@ -9,4 +9,10 @@ public interface BlogService {
     public BlogResponse createBlog(BlogRequest blog);
 
     public Page<BlogResponse> getAllBlog(Pageable pageable, String keyword);
+
+    public BlogResponse getBlogById(Long id);
+
+    public void deleteBlogById(Long id);
+
+    public BlogResponse updateBlogById(BlogRequest blog);
 }

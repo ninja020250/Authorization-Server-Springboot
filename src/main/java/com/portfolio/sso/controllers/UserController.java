@@ -2,10 +2,8 @@ package com.portfolio.sso.controllers;
 
 import com.portfolio.sso.models.Profile;
 import com.portfolio.sso.models.User;
-import com.portfolio.sso.payload.response.MessageResponse;
 import com.portfolio.sso.repository.ProfileRepository;
 import com.portfolio.sso.repository.UserRepository;
-import com.portfolio.sso.security.services.CityService;
 import com.portfolio.sso.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

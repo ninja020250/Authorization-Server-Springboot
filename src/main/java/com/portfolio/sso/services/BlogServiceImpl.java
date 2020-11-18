@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -31,10 +32,22 @@ public class BlogServiceImpl implements BlogService {
 
     public Page<BlogResponse> getAllBlog(Pageable pageable, String keyword) {
         Page<BlogResponse> listBlog = blogRepository.getAllBlog(pageable, keyword);
-//        List<CreateBlogResponse> list = new ArrayList<>();
-//        for (int i = 0; i < listBlog.getContent().size(); i++) {
-//            list.add(listBlog.getContent().get(i).toResponse());
-//        }
         return listBlog;
+    }
+
+    public BlogResponse getBlogById(Long id){
+        Blog blog = blogRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return blog.toResponse();
+    }
+
+    public void deleteBlogById(Long id){
+      blogRepository.deleteById(id);
+    }
+
+    public BlogResponse updateBlogById(BlogRequest blog){
+        User user = userRepository.findById(blog.getUserId()).orElseThrow(EntityNotFoundException::new);
+        Blog b = new Blog(blog, user);
+        Blog res = blogRepository.save(b);
+        return res.toResponse();
     }
 }

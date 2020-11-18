@@ -31,6 +31,8 @@ public class BlogRequest {
 
     private LocalDateTime updatedAt;
 
+    private LocalDateTime expirationTime;
+
     public Long getId() {
         return id;
     }
@@ -109,5 +111,13 @@ public class BlogRequest {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(LocalDateTime expirationTime) {
+        this.expirationTime = expirationTime;
     }
 }

@@ -49,7 +49,10 @@ public class Blog {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Blog(@NotBlank Long id, @NotBlank User user, @NotBlank String title, @NotBlank String template, @NotBlank String thumbnail, @NotBlank String body, String banner, @NotBlank Boolean published) {
+    @NotBlank
+    private LocalDateTime expirationTime;
+
+    public Blog(@NotBlank Long id, @NotBlank User user, @NotBlank String title, @NotBlank String template, @NotBlank String thumbnail, @NotBlank String body, String banner, @NotBlank Boolean published,@NotBlank LocalDateTime expirationTime) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -58,6 +61,7 @@ public class Blog {
         this.body = body;
         this.banner = banner;
         this.published = published;
+        this.expirationTime =  expirationTime;
     }
 
     public Blog() {
@@ -155,6 +159,14 @@ public class Blog {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(LocalDateTime expirationTime) {
+        this.expirationTime = expirationTime;
     }
 
     public BlogResponse toResponse() {

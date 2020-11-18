@@ -38,4 +38,27 @@ public class BlogController {
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sortable);
         return blogService.getAllBlog(pageable, params.getSearch());
     }
+
+    @GetMapping("/{id}")
+    public BlogResponse getBlogDetail(
+            @PathVariable Long id
+    ) {
+        return blogService.getBlogById(id);
+    }
+
+    @PutMapping("")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public BlogResponse updateBlogDetail(
+            @Valid @RequestBody BlogRequest req
+    ) {
+        return blogService.updateBlogById(req);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public void deleteBlogDetail(
+            @PathVariable Long id
+    ) {
+        blogService.deleteBlogById(id);
+    }
 }
