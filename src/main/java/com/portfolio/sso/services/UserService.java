@@ -27,9 +27,9 @@ public class UserService {
         Profile profile = profileRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User Not Found with id:"));
         profile.setPhotos(fileName);
         Profile savedUser = profileRepository.save(profile);
-        String uploadDir = "user-photos/" + savedUser.getId();
+        String uploadDir = "/images/user-photos/" + savedUser.getId();
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
-        return "/user-photos/" + id + "/" + fileName;
+        return "/images/user-photos/" + id + "/" + fileName;
     }
 
     public boolean createAccount(User user, Profile profile) {

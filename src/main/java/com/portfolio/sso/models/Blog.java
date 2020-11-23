@@ -64,6 +64,18 @@ public class Blog {
         this.expirationTime =  expirationTime;
     }
 
+    public Blog(@NotBlank Long id, @NotBlank String title, @NotBlank String template, @NotBlank String thumbnail, @NotBlank String body, String banner, @NotBlank Boolean published, @NotBlank LocalDateTime createdAt,@NotBlank LocalDateTime updatedAt){
+        this.id = id;
+        this.title = title;
+        this.template = template;
+        this.thumbnail = thumbnail;
+        this.body = body;
+        this.banner = banner;
+        this.published = published;
+        this.createdAt =  createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Blog() {
     }
 

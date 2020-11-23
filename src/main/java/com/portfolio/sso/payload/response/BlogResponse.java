@@ -1,7 +1,10 @@
 package com.portfolio.sso.payload.response;
 
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
+@Builder
 public class BlogResponse {
     private Long id;
 

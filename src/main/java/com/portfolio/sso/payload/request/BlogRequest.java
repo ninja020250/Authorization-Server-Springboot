@@ -4,6 +4,7 @@ import com.portfolio.sso.models.User;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +21,8 @@ public class BlogRequest {
     private String template;
 
     private String thumbnail;
+
+    private MultipartFile thumbnailFile;
 
     private String body;
 
