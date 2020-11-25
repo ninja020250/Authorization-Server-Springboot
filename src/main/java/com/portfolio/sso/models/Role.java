@@ -1,5 +1,7 @@
 package com.portfolio.sso.models;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;

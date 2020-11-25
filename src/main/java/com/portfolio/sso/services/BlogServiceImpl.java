@@ -30,8 +30,8 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private UserRepository userRepository;
 
-    public Blog createBlog(BlogRequest blog) throws IOException {
-        User user = userRepository.findById(blog.getUserId()).orElseThrow(EntityNotFoundException::new);
+    public Blog createBlog(BlogRequest blog,  Long userId) throws IOException {
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         Blog b = new Blog(blog, user);
         String fileName = null;
         if (!blog.getThumbnailFile().isEmpty()) {
@@ -57,8 +57,8 @@ public class BlogServiceImpl implements BlogService {
         blogRepository.deleteById(id);
     }
 
-    public Blog updateBlogById(BlogRequest blog) {
-        User user = userRepository.findById(blog.getUserId()).orElseThrow(EntityNotFoundException::new);
+    public Blog updateBlogById(BlogRequest blog, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         Blog b = new Blog(blog, user);
         return blogRepository.save(b);
     }

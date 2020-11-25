@@ -4,28 +4,24 @@ import com.portfolio.sso.dtos.BlogDTO;
 import com.portfolio.sso.models.Blog;
 import com.portfolio.sso.payload.request.BlogRequest;
 import com.portfolio.sso.payload.request.PageableRequest;
-import com.portfolio.sso.payload.response.BlogResponse;
 import com.portfolio.sso.payload.response.PagingObject;
 import com.portfolio.sso.payload.response.ResponseObject;
 import com.portfolio.sso.payload.response.enums.ResponseStatus;
+import com.portfolio.sso.security.services.UserDetailsImpl;
 import com.portfolio.sso.services.BlogService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +35,8 @@ public class BlogController {
     @PostMapping("")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> createBlog(@ModelAttribute BlogRequest req) throws IOException {
-        Blog blog = blogService.createBlog(req);
+        UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Blog blog = blogService.createBlog(req, u.getId());
         BlogDTO.BlogResponseDTO response = BlogDTO.BlogToBlogResponse(blog);
 
         return ResponseEntity.ok(ResponseObject.builder()
@@ -93,7 +90,8 @@ public class BlogController {
     public ResponseEntity<ResponseObject> updateBlogDetail(
             @Valid @RequestBody BlogRequest req
     ) {
-        BlogDTO.BlogResponseDTO response = BlogDTO.BlogToBlogResponse(blogService.updateBlogById(req));
+        UserDetailsImpl u = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BlogDTO.BlogResponseDTO response = BlogDTO.BlogToBlogResponse(blogService.updateBlogById(req, u.getId()));
 
         return ResponseEntity.ok(ResponseObject.builder()
                 .data(response)
@@ -116,11 +114,14 @@ public class BlogController {
                 .build());
     }
 
-    @GetMapping("/images/blogs-photo/{image}")
-    public void getBlogImages(HttpServletResponse httpServletResponse,  @PathVariable String image) throws IOException {
-        InputStream in = getClass()
-                .getResourceAsStream("/images/avatar.jpg");
-        httpServletResponse.getOutputStream().write(IOUtils.toByteArray(in));
-    }
+//    @GetMapping("/images/blogs-photo/{image}")
+//    public void getBlogImages(HttpServletResponse httpServletResponse, @PathVariable String image) throws IOException {
+////        String currentDir = new File("").getAbsolutePath();
+////        InputStream imgFile = new ClassPathResource("/static/avatar.jpg").getInputStream();
+//        String srcPath = System.getProperty("user.dir") + "\\images\\avatar.jpg";
+////        URL url = getResource(srcPath);
+//        InputStream in = url.openConnection().getInputStream();
+//        httpServletResponse.getOutputStream().write(IOUtils.toByteArray(in));
+//    }
 
 }

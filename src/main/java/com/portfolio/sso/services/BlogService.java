@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface BlogService {
-    public Blog createBlog(BlogRequest blog) throws IOException;
+    public Blog createBlog(BlogRequest blog, Long userId) throws IOException;
 
     public Page<Blog> getAllBlog(Pageable pageable, String keyword);
 
@@ -19,5 +19,5 @@ public interface BlogService {
 
     public void deleteBlogById(Long id);
 
-    public Blog updateBlogById(BlogRequest blog);
+    public Blog updateBlogById(BlogRequest blog, Long userId);
 }
