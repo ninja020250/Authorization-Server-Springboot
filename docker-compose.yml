@@ -1,0 +1,60 @@
+version : "2.1"
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    volumes:
+      - /my/own/datadir:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=nhatcuong123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=authorization
+    networks:
+      - microservicesnet
+
+  eureka:
+    image: microservice/server
+    container_name: eureka
+    hostname: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - microservicesnet
+
+  zuul:
+    image: microservice/zuul
+    container_name: zuul
+    build:
+      context: .
+      dockerfile: ./spring-eureka-zuul/Dockerfile
+    ports:
+      - "8762:8762"
+    networks:
+      - microservicesnet
+
+  sso:
+    image: ninja020250/sso-container:0.1
+    container_name: sso
+    ports:
+       - "8201:8201"
+    environment:
+      - PG_DB_HOST=postgres
+      - PG_DB_NAME=authorization
+      - PG_DB_PORT=5433
+    networks:
+      - microservicesnet
+    depends_on:
+      - postgres
+ 
+  flame:
+    image: ninja020250/flame-container:0.1
+    container_name: flame
+    ports:
+      - "8202:8202"
+    networks:
+      - microservicesnet
+
+networks:
+  microservicesnet:
